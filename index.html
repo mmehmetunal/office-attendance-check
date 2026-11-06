@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Yoklama</title>
+  <meta name="theme-color" content="#f2f4f7">
+  <meta name="robots" content="noindex">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="locked">
+  <header class="bar">
+    <div class="column bar-inner">
+      <span class="brand">
+        <svg class="mark" viewBox="0 0 24 24" aria-hidden="true">
+          <rect x="2" y="4" width="4" height="16" rx="1" fill="#2e7d32"/>
+          <rect x="7.5" y="4" width="4" height="16" rx="1" fill="#1d5fbf"/>
+          <rect x="13" y="4" width="4" height="16" rx="1" fill="#c4242a"/>
+          <rect x="18.5" y="4" width="4" height="16" rx="1" fill="#b4690e"/>
+        </svg>
+        <span id="brand-name">Yoklama</span>
+      </span>
+      <div class="lang" role="group" aria-label="Language / Dil">
+        <button type="button" data-lang="tr">TR</button>
+        <button type="button" data-lang="en">EN</button>
+        <button type="button" data-lang="ru">RU</button>
+      </div>
+    </div>
+  </header>
+
+  <form class="lock" id="lock" hidden>
+    <h1 id="lock-title"></h1>
+    <label for="password" id="password-label"></label>
+    <input id="password" type="password" autocomplete="off" autocapitalize="off" spellcheck="false" required>
+    <p class="lock-error" id="lock-error" role="alert" hidden></p>
+    <button type="submit" class="btn-primary" id="unlock"></button>
+  </form>
+
+  <main class="column">
+    <div class="title-row">
+      <h1 id="scope-title">&nbsp;</h1>
+      <p id="today" class="muted"></p>
+    </div>
+
+    <nav id="office-tabs" class="tabs"></nav>
+    <nav id="floor-tabs" class="tabs tabs-small"></nav>
+
+    <section class="progress" id="progress" hidden>
+      <div class="strip" id="strip" aria-hidden="true"></div>
+      <div class="progress-line">
+        <p id="progress-text"></p>
+        <button type="button" class="btn-quiet" id="mark-rest"></button>
+      </div>
+    </section>
+
+    <ul class="roster" id="roster"></ul>
+    <div class="state" id="state" hidden></div>
+  </main>
+
+  <footer class="dock">
+    <div class="column dock-inner">
+      <p id="dock-text"></p>
+      <button type="button" class="btn-primary" id="open-summary" disabled></button>
+    </div>
+  </footer>
+
+  <dialog id="summary" aria-labelledby="summary-title">
+    <div class="sheet">
+      <div class="sheet-head">
+        <h2 id="summary-title"></h2>
+        <button type="button" class="btn-quiet" id="close-summary"></button>
+      </div>
+      <dl class="tally" id="tally"></dl>
+      <p class="notice" id="unmarked-note" hidden></p>
+      <p class="sheet-sub" id="message-label"></p>
+      <pre class="message" id="message"></pre>
+      <div class="sheet-actions">
+        <a class="btn-primary" id="send-whatsapp" target="_blank" rel="noopener"></a>
+        <button type="button" class="btn-secondary" id="copy-message"></button>
+      </div>
+      <button type="button" class="btn-quiet btn-reset" id="reset"></button>
+    </div>
+  </dialog>
+
+  <script src="app.js"></script>
+</body>
+</html>
