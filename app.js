@@ -1,12 +1,14 @@
 'use strict';
 
-const STATUSES = ['office', 'remote', 'absent', 'leave'];
+const STATUSES = ['office', 'remote', 'duty', 'leave', 'sick', 'noinfo'];
+/* Who needs following up comes first in the message. */
+const MESSAGE_ORDER = ['noinfo', 'sick', 'leave', 'duty', 'remote'];
 const LOCALES = { tr: 'tr-TR', en: 'en-GB', ru: 'ru-RU' };
 
 const STRINGS = {
   tr: {
     brand: 'Yoklama',
-    status: { office: 'Ofiste', remote: 'Evden', absent: 'Gelmedi', leave: 'İzinli' },
+    status: { office: 'Ofiste', remote: 'Evden', duty: 'Dış görev', leave: 'İzinli', sick: 'Raporlu', noinfo: 'Haber vermedi' },
     floor: (n) => `${n}. Kat`,
     progress: (done, all) => `${all} kişiden ${done} tanesi işaretlendi`,
     markRest: 'Kalanlar ofiste',
@@ -34,7 +36,7 @@ const STRINGS = {
   },
   en: {
     brand: 'Roll call',
-    status: { office: 'In office', remote: 'Remote', absent: 'Absent', leave: 'On leave' },
+    status: { office: 'In office', remote: 'Remote', duty: 'Off-site', leave: 'On leave', sick: 'Sick leave', noinfo: 'No notice' },
     floor: (n) => `Floor ${n}`,
     progress: (done, all) => `${done} of ${all} marked`,
     markRest: 'Rest are in office',
@@ -62,7 +64,7 @@ const STRINGS = {
   },
   ru: {
     brand: 'Перекличка',
-    status: { office: 'В офисе', remote: 'Из дома', absent: 'Не пришёл', leave: 'В отпуске' },
+    status: { office: 'В офисе', remote: 'Из дома', duty: 'Командировка', leave: 'В отпуске', sick: 'Больничный', noinfo: 'Не сообщил' },
     floor: (n) => `${n} этаж`,
     progress: (done, all) => `Отмечено ${done} из ${all}`,
     markRest: 'Остальные в офисе',
@@ -122,9 +124,7 @@ const app = {
 
 function detectLang() {
   const saved = readStore(localStorage, 'attendance-lang');
-  if (saved in STRINGS) return saved;
-  const device = (navigator.language || '').slice(0, 2).toLowerCase();
-  return device in STRINGS ? device : 'en';
+  return saved in STRINGS ? saved : 'ru';
 }
 
 const t = () => STRINGS[app.lang];
@@ -329,9 +329,9 @@ function buildMessage() {
   const counts = STATUSES.map((status) => `${s.status[status]}: ${inStatus(status).length}`);
   if (unmarked) counts.push(`İşaretlenmedi: ${unmarked}`);
 
-  const headings = { remote: 'Evden çalışıyor', absent: 'Gelmedi', leave: 'İzinli' };
+  const headings = { noinfo: 'Haber vermedi', sick: 'Raporlu', leave: 'İzinli', duty: 'Dış görevde', remote: 'Evden çalışıyor' };
   const lines = [`*${s.brand} - ${formatDate(lang)}*`, counts.join(' | ')];
-  for (const status of ['remote', 'absent', 'leave']) {
+  for (const status of MESSAGE_ORDER) {
     const people = inStatus(status);
     if (!people.length) continue;
     lines.push('', `*${headings[status]} (${people.length})*`);
@@ -469,7 +469,8 @@ async function start() {
 
 function openApp() {
   try {
-    app.marks = JSON.parse(readStore(sessionStorage, todayKey)) || {};
+    const saved = JSON.parse(readStore(sessionStorage, todayKey)) || {};
+    app.marks = Object.fromEntries(Object.entries(saved).filter(([, status]) => STATUSES.includes(status)));
   } catch {
     app.marks = {};
   }

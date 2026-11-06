@@ -1,6 +1,6 @@
 {
-  "name": "Yoklama",
-  "short_name": "Yoklama",
+  "name": "Перекличка",
+  "short_name": "Перекличка",
   "start_url": ".",
   "display": "standalone",
   "background_color": "#f2f4f7",

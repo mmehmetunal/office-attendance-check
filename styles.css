@@ -13,6 +13,8 @@
   --remote: #1d5fbf;     --remote-bg: #e1ecfb;  --remote-ink: #123a75;
   --absent: #c4242a;     --absent-bg: #ffedea;  --absent-ink: #831c1e;
   --leave: #b4690e;      --leave-bg: #fdf1d8;   --leave-ink: #6f3f06;
+  --duty: #0f766e;       --duty-bg: #d9f3ef;    --duty-ink: #0b4f4a;
+  --sick: #a8326f;       --sick-bg: #fbe4ef;    --sick-ink: #6e1a47;
 
   --radius-card: 8px;
   --radius-control: 6px;
@@ -75,7 +77,9 @@ h1 { font-size: 24px; line-height: 1.2; font-weight: 500; letter-spacing: -0.01e
 .strip i { flex: 1; min-width: 0; border-radius: 2px; background: var(--control); transition: background-color .15s ease; }
 .strip i[data-status="office"] { background: var(--office); }
 .strip i[data-status="remote"] { background: var(--remote); }
-.strip i[data-status="absent"] { background: var(--absent); }
+.strip i[data-status="noinfo"] { background: var(--absent); }
+.strip i[data-status="duty"] { background: var(--duty); }
+.strip i[data-status="sick"] { background: var(--sick); }
 .strip i[data-status="leave"] { background: var(--leave); }
 .progress-line { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 4px; font-size: 14px; }
 
@@ -92,7 +96,7 @@ h1 { font-size: 24px; line-height: 1.2; font-weight: 500; letter-spacing: -0.01e
 .who { min-width: 0; }
 .dept { font-size: 13px; color: var(--muted); }
 .name { font-size: 17px; font-weight: 500; line-height: 1.25; overflow-wrap: anywhere; }
-.choices { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+.choices { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
 .choice {
   min-height: 44px; padding: 0 2px; border-radius: var(--radius-control);
   background: var(--ground); color: #3a3f47; font-size: 14px;
@@ -102,12 +106,18 @@ h1 { font-size: 24px; line-height: 1.2; font-weight: 500; letter-spacing: -0.01e
 .choice[aria-pressed="true"] { font-weight: 500; }
 .choice[data-status="office"][aria-pressed="true"] { background: var(--office-bg); color: var(--office-ink); box-shadow: inset 0 0 0 1.5px var(--office); }
 .choice[data-status="remote"][aria-pressed="true"] { background: var(--remote-bg); color: var(--remote-ink); box-shadow: inset 0 0 0 1.5px var(--remote); }
-.choice[data-status="absent"][aria-pressed="true"] { background: var(--absent-bg); color: var(--absent-ink); box-shadow: inset 0 0 0 1.5px var(--absent); }
+.choice[data-status="duty"][aria-pressed="true"]   { background: var(--duty-bg); color: var(--duty-ink); box-shadow: inset 0 0 0 1.5px var(--duty); }
+.choice[data-status="sick"][aria-pressed="true"]   { background: var(--sick-bg); color: var(--sick-ink); box-shadow: inset 0 0 0 1.5px var(--sick); }
+.choice[data-status="noinfo"][aria-pressed="true"] { background: var(--absent-bg); color: var(--absent-ink); box-shadow: inset 0 0 0 1.5px var(--absent); }
 .choice[data-status="leave"][aria-pressed="true"]  { background: var(--leave-bg);  color: var(--leave-ink);  box-shadow: inset 0 0 0 1.5px var(--leave); }
 
 @media (min-width: 720px) {
   .person { grid-template-columns: 72px minmax(180px, 1fr) minmax(0, 400px); }
   .choices { grid-column: auto; }
+}
+@media (min-width: 980px) {
+  .person { grid-template-columns: 72px minmax(170px, 1fr) minmax(0, 640px); }
+  .choices { grid-template-columns: repeat(6, 1fr); }
 }
 
 .state { padding: 40px 16px; text-align: center; color: var(--muted); background: var(--surface); border: 1px dashed var(--control); border-radius: var(--radius-card); }
@@ -146,7 +156,7 @@ dialog::backdrop { background: rgb(10 14 20 / .45); }
 .sheet { padding: 16px; padding-bottom: calc(12px + env(safe-area-inset-bottom)); }
 .sheet-head { display: flex; align-items: center; justify-content: space-between; }
 h2 { font-size: 20px; font-weight: 500; }
-.tally { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 8px 0 12px; }
+.tally { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 8px 0 12px; }
 .tally div { display: flex; flex-direction: column-reverse; }
 .tally dt { font-size: 13px; color: var(--muted); }
 .tally dd { font-size: 24px; line-height: 1.2; font-weight: 500; }
@@ -171,7 +181,6 @@ h2 { font-size: 20px; font-weight: 500; }
 /* Staff portraits are upright with the head near the top. */
 img.face { background: var(--raised); object-position: 50% 12%; }
 
-html[lang="ru"] .choice { font-size: 13px; padding: 0; }
 
 /* Lock screen */
 body.locked .title-row,
