@@ -31,5 +31,3 @@ Tüm liste `private/employees.json` dosyasındadır. Değişiklikten sonra kript
 - `departments`: departman listesi ve sırası.
 - `employees`: `department` alanı bu listedeki adlardan biri olmalı. `office` alanı ofisin `id` değeriyle eşleşmeli; `floor` değeri ofisin `floors` listesindekiyle aynı olmalı, katsız ofislerde `null` olur.
 - `photo`: tam bağlantı ya da `photos/` klasöründeki dosyanın yolu (`"photos/mehmet-unal.jpg"`). Boşsa baş harfler görünür. Kare yakın plan fotoğraflar en iyi sonucu verir.
-
-`mock.data.html` telefon ve e-posta içerir; `.gitignore` içindedir, yayına girmez.
